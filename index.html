@@ -36,20 +36,26 @@
         setTimeout(function(){
         	$("body").html("<header id='top' class='header'><div class='text-center'><h1>Random hyttebums generator</h1><br><center><table><tr><th><center>First priority</center></th><th><center>Second priority</center></th><th><center>Third priority</center></th></tr><tr><td><textarea id='bumser1' cols='30' rows='10' style='background-image:url(nr1.jpg)'></textarea>&nbsp;</td><td><textarea id='bumser2' cols='30' rows='10' style='background-image:url(nr2.jpg)'></textarea>&nbsp;</td><td><textarea id='bumser3' cols='30' rows='10' style='background-image:url(nr3.jpg)'></textarea></td></tr></table></center><br><br><a href='#' onclick='location.reload();' class='btn btn-dark btn-lg'>Go back</a></div></header>");
         	bumser = Shuffle(bumser);
-        	var first = Shuffle(bumser, teamSize);
+        	var first = Shuffle(bumser, teamSize),
+                getCleanIndex = function(notContaining) {
+                    for(var i = 0; i < first.length; i++)
+                        if (first[i].indexOf(notContaining) === -1)
+                            return i;
+                    console.log("Error in getCleanIndex("+notContaining+")");
+                };
         	if (bumser.indexOf("Søborg") !== -1 && first.indexOf("Søborg") === -1) {
-        		first[0] = "Søborg";
+        		first[getCleanIndex("Breddam")] = "Søborg";
         		bumser = bumser.filter(bums => bums !== "Søborg");
         	}
         	if (bumser.indexOf("Breddam") !== -1 && first.indexOf("Breddam") === -1) {
-        		first[1] = "Breddam";
+        		first[getCleanIndex("Søborg")] = "Breddam";
         		bumser = bumser.filter(bums => bums !== "Breddam");
         	}
         	$("#bumser1").val("\n\n"+ Shuffle(first).join("\n") );
         	$("#bumser2").val("\n\n"+ Shuffle(bumser, teamSize).join("\n") );
         	$("#bumser3").val("\n\n"+ Shuffle(bumser, teamSize).join("\n") );
-        }, 13);//1500
-        $("body").html("<img src='spinner.gif' />");
+        }, 1500);//1500
+        $("body").html("<center><img src='spinner.gif' /></center>");
     }
     </script>
 </head>
