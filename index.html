@@ -20,11 +20,35 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <style type="text/css">
+    	textarea {
+    		color: white;
+    		font-size: 20px;
+    		text-align: center;
+    		background-size: cover;
+    	}
+    </style>
     <script>
     var generateBums = function() {
         //window.scrollTo(0,document.body.scrollHeight);
-        var bums = ["Nicolai Søborg", "Alice", "Bob", "Charlie"];
-        setTimeout(function(){ alert("Random hyttebums:\n" + bums[parseInt(Math.random())]); location.reload(); }, 1500);
+        var bumser = $("#bumser").val().split("\n");
+        var teamSize = parseInt($("#teamSize").val(), 10);
+        setTimeout(function(){
+        	$("body").html("<header id='top' class='header'><div class='text-center'><h1>Random hyttebums generator</h1><br><center><table><tr><th><center>First priority</center></th><th><center>Second priority</center></th><th><center>Third priority</center></th></tr><tr><td><textarea id='bumser1' cols='30' rows='10' style='background-image:url(nr1.jpg)'></textarea>&nbsp;</td><td><textarea id='bumser2' cols='30' rows='10' style='background-image:url(nr2.jpg)'></textarea>&nbsp;</td><td><textarea id='bumser3' cols='30' rows='10' style='background-image:url(nr3.jpg)'></textarea></td></tr></table></center><br><br><a href='#' onclick='location.reload();' class='btn btn-dark btn-lg'>Go back</a></div></header>");
+        	bumser = Shuffle(bumser);
+        	var first = Shuffle(bumser, teamSize);
+        	if (bumser.indexOf("Søborg") !== -1 && first.indexOf("Søborg") === -1) {
+        		first[0] = "Søborg";
+        		bumser = bumser.filter(bums => bums !== "Søborg");
+        	}
+        	if (bumser.indexOf("Breddam") !== -1 && first.indexOf("Breddam") === -1) {
+        		first[1] = "Breddam";
+        		bumser = bumser.filter(bums => bums !== "Breddam");
+        	}
+        	$("#bumser1").val("\n\n"+ Shuffle(first).join("\n") );
+        	$("#bumser2").val("\n\n"+ Shuffle(bumser, teamSize).join("\n") );
+        	$("#bumser3").val("\n\n"+ Shuffle(bumser, teamSize).join("\n") );
+        }, 13);//1500
         $("body").html("<img src='spinner.gif' />");
     }
     </script>
@@ -33,10 +57,75 @@
     <header id="top" class="header">
         <div class="text-center">
             <h1>Random hyttebums generator</h1>
-            <h3>Very useful to generate random OPturs hyttebums...</h3>
+            <h3>Insert names:</h3>
+            <textarea id="bumser" cols="28" rows="10" style="color: black">Anne
+Kirsten
+Hanne
+Mette
+Anna
+Helle
+Susanne
+Lene
+Maria
+Marianne
+Lone
+Inge
+Karen
+Camilla
+Pia
+Bente
+Louise
+Charlotte
+Jette
+Tina
+Søborg
+Breddam
+Peter
+Jens
+Michael
+Lars
+Henrik
+Thomas
+Søren
+Jan
+Christian
+Martin
+Niels
+Anders
+Morten
+Jesper
+Jørgen
+Hans
+Per
+Ole
+Mads
+Rasmus</textarea>
             <br>
-            <a href="#" onclick="generateBums();" class="btn btn-dark btn-lg">Generate random hyttebums</a>
+            Team size: <input type="number" id="teamSize" value="3" style="width: 30px">
+            <br>
+            <a href="#" onclick="generateBums();" class="btn btn-dark btn-lg">Generate hyttebums teams</a>
         </div>
     </header>
+    <script>
+function Shuffle(o, length=null, remove=false) {
+	if (length == null) {
+		length = o.length;
+	} else {
+		remove = true;
+	}
+
+	// Actually shuffle:
+	for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+
+	var out = Array(length);
+	for (var i = 0; i < length; i++)
+		out[i] = o[i];
+
+	if (remove) o = o.slice(length);
+
+	return out;
+};
+$("#bumser").val( Shuffle($("#bumser").val().split("\n")).join("\n") );
+    </script>
 </body>
 </html>
